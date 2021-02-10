@@ -1,0 +1,5739 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Returns Open API",
+    "description": "Returns API provide you a possibility to manage main operation with claim.\r\n\r\nSuch as:\r\n\r\n    * Create claims on your website or catalogue system​\r\n\r\n    * Transfer the claims and send them directly to the recipient ​\r\n\r\n    * Apply filters and retrieve selected claims from your claim repository​\r\n\r\n    * Fill a dashboard or a claim list​\r\n\r\n    * Add or update information to your claims​\r\n\r\n    * Changes are automatically visible to your business partner​\r\n\r\n    * Transmit your claim decision \r\n\r\n    * The claim will automatically be closed \r\n\r\n",
+    "termsOfService": "http://returns-publicapi-qa.azurewebsites.net/api-docs/index.html",
+    "contact": {
+      "name": "Returns support",
+      "email": "Moritz.Mahler@tecalliance.net"
+    },
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/v1/attachments/{tecComId}": {
+      "post": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Upload attachment",
+        "description": "Upload attachment to the claim.",
+        "operationId": "Create",
+        "parameters": [
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ClaimId": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "TecComId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "Category": {
+                    "$ref": "#/components/schemas/AttachmentCategory"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                }
+              },
+              "encoding": {
+                "ClaimId": {
+                  "style": "form"
+                },
+                "TecComId": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File was uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments/{id}/{tecComId}": {
+      "put": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Update attachment name",
+        "description": "Update attachment data",
+        "operationId": "Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttachmentUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File name was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Requested entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Delete attachment",
+        "description": "Delete attachment of claim",
+        "operationId": "Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments/{id}/view/{tecComId}": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "View attachment",
+        "description": "Preview attachment of picture category",
+        "operationId": "View",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments/{id}/download/{tecComId}": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Download attachment",
+        "description": "Download attachment as file",
+        "operationId": "Download",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{tecComId}": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Creates a Claim",
+        "description": "Allow you to create a new claim. Created claim has Sent status and visible to a receiver",
+        "operationId": "CreateClaim",
+        "parameters": [
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "new claim",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClaimDto"
+              },
+              "example": {"additional":{"acceptCondition":0,"comment":"Comment","dateForResponse":"2021-02-20T13:22:52.9112878Z","rejectCondition":1},"additionalCosts":[{"currencyId":"EUR","description":"Description about additional cost","price":1.0,"quantity":1,"receiverItemNo":"001","type":0}],"flowType":2,"garage":{"city":"London","country":"GB","customerNo":"customerNo","email":"exampleGarage@gmail.com","garageName":"GarageName","garageName2":"GarageName2","invoiceNo":"InvoiceNo","lastName":"LastName","phone":"800 5676 455 567","receiptExists":true,"salutation":"Mr","stateOrProvince":"State","street":"Baker Street 221b","street2":"Baker Street 222","street3":"Baker Street 223","zip":"1234"},"individualResponse":[{"individualQuestionId":27,"response":"{\"questionType\":2,\"value\":[\"7\",\"6\",\"5\",\"4\",\"3\"],\"others\":\"\"}"}],"parts":[{"articleDescription":"Mounting, axle beam","articleNo":"2323","articlePrice":100.0,"articleSellerNo":null,"brand":"BIRTH","currency":"EUR","deliveryNotePos":null,"ean":"1000000086768","invoicePos":null,"materialGroup":100243,"orderPos":null,"quantity":10,"quantityReceived":null,"receiverItemNo":"0123456789","serialNumber":null,"deliveryNoteNo":"deliveryNoteNo","invoiceNo":"invoiceNo","orderNo":"orderNo","deliveryNoteLineNo":"deliveryNoteLineNo","invoiceLineNo":"invoiceLineNo","orderLineNo":"orderLineNo","invoiceDate":"2021-01-22T00:00:00Z","deliveryNoteDate":null,"orderDate":"2021-01-22T00:00:00Z"}],"problem":{"description":"Problem Description","detectedAt":0,"detectionDate":"2021-01-23T00:00:00Z","otherConditionDescription":"Some specific condition","packagingCondition":null,"problemConditions":[32,16],"wasFitted":null},"reason":null,"receiver":{"receiverTecComId":"put real tecComId","companyName":null,"companyAlternativeName":null,"branch":null,"address":null,"secondAddress":null,"thirdAddress":null,"zipCode":null,"city":null,"stateOrProvince":null,"country":null,"customerId":null,"supplierId":null,"deliveryPartyNo":null,"email":null},"sender":{"senderTecComId":"put real tecComId","name":null,"name2":null,"address":null,"secondAddress":null,"thirdAddress":null,"zipCode":null,"city":null,"stateOrProvince":null,"country":null,"department":null,"memberBuyingGroupId":null,"branch":null,"contact":null,"customerClaimId":null,"deliveryNoteNumber":null,"email":null},"subject":"Claim Subject","vehicle":{"capacity":1598,"engineCode":"engineCode","engineNo":"engineNo","errorCode":"errorCode","fittedBy":0,"fittingDate":"2021-01-26T00:00:00Z","fuel":2,"manufacturer":"SKODA","mileageFitting":163000,"mileageFittingUnits":0,"mileageRemoval":164000,"mileageRemovalUnits":0,"model":"OCTAVIA II Combi (1Z5)","modelYear":2011,"power":105,"powerUnits":0,"registration1":"0123456789","registration2":"0123456789","removalDate":"2021-01-28T00:00:00Z","removedBy":0,"transmission":1,"vehicleSearch":"Ukraine","version":"1.6 TDI","vin":"TMBHT61ZXA8019412"},"senderInternalNotes":null}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimActionResult"
+                },
+                "example": {"id":237798,"tecComOrgId":"creator tecComId","userName":"example@gmail.com","subject":"subject","createdAt":"2021-02-10T13:22:52.9112878Z","sentAt":"2021-02-10T13:22:52.9112878Z","modifiedBy":"example@gmail.com","userPosition":5,"modifiedAt":"2021-02-10T13:22:52.9112878Z","openedAt":null,"openedBy":null,"status":2,"category":0,"flowType":2,"parts":[{"id":248171,"articleNo":"2323","brand":"BIRTH","articleDescription":"Mounting, axle beam","ean":"1000000086768","materialGroup":100243,"articlePrice":100.0,"articleSellerNo":null,"serialNumber":null,"receiverItemNo":"receiverItemNo","orderPos":null,"deliveryNotePos":null,"invoicePos":null,"quantity":10,"currency":"EUR","deliveryNoteNo":"deliveryNoteNo","invoiceNo":"invoiceNo","orderNo":"orderNo","deliveryNoteLineNo":"deliveryNoteLineNo","invoiceLineNo":"invoiceLineNo","orderLineNo":"orderLineNo","invoiceDate":"2021-01-22T00:00:00Z","deliveryNoteDate":null,"orderDate":"2021-01-22T00:00:00Z","status":1,"decision":null}],"receiver":{"receiverTecComId":"receiver company tecComId","companyName":"Team9-Test-Supplier_1","companyAlternativeName":"name2","branch":"branch","address":"Address1","secondAddress":"Address 2","thirdAddress":"Address 3","zipCode":"zipCode","city":"city","stateOrProvince":"state/province","country":"DE","customerId":"54743","supplierId":"54743","deliveryPartyNo":"deliveryPartyNo","email":"example@gmail.com"},"sender":{"senderTecComId":"your company tecComId","name":"Team9-Test-Buyer_1","name2":"name2","address":"Address1","secondAddress":"Address 2","thirdAddress":"Address 3","zipCode":"zipCode","city":"city","stateOrProvince":"state/province","country":"DE","department":"department","memberBuyingGroupId":"member id buying group","branch":"branch","contact":null,"customerClaimId":"customerClaimId","deliveryNoteNumber":"deliveryNoteNo","email":"example@gmail.com"},"problem":{"wasFitted":null,"description":"Problem Description","packagingCondition":null,"detectedAt":0,"detectionDate":"2021-01-23T00:00:00Z","problemConditions":[32,16],"otherConditionDescription":"Some specific condition"},"garage":{"garageName":"GarageName","garageName2":"GarageName2","customerNo":"customerNo","invoiceNo":"InvoiceNo","salutation":"Mr","lastName":"LastName","street":"Baker Street 221b","street2":"Baker Street 222","street3":"Baker Street 223","stateOrProvince":"State","zip":"1234","city":"London","country":"GB","email":"exampleGarage@gmail.com","phone":"800 5676 455 567","receiptExists":true},"additionalCosts":[{"id":0,"currencyId":"EUR","decision":null,"description":"Description about additional cost","price":1.0,"quantity":1,"receiverItemNo":"001","type":0}],"vehicle":{"registration1":"registration1","registration2":"registration2","manufacturer":"SKODA","model":"OCTAVIA II Combi (1Z5)","version":"1.6 TDI","vin":"TMBHT61ZXA8019412","vehicleSearch":"Ukraine","modelYear":2011,"power":105,"powerUnits":0,"capacity":1598,"transmission":1,"fuel":2,"engineCode":"engineCode","engineNo":"engineNo","errorCode":"errorCode","mileageFitting":163000,"mileageFittingUnits":0,"mileageRemoval":164000,"mileageRemovalUnits":0,"fittingDate":"2021-01-26T00:00:00Z","removalDate":"2021-01-28T00:00:00Z","fittedBy":0,"removedBy":0},"individualResponse":[{"individualQuestionId":27,"response":"{\"questionType\":2,\"value\":[\"7\",\"6\",\"5\",\"4\",\"3\"],\"others\":\"\"}"}],"additional":{"acceptCondition":0,"rejectCondition":1,"comment":"Comment","dateForResponse":"2021-02-20T13:22:52.9112878Z"},"attachments":[],"claimDecision":null,"reason":null,"allowPrintLabel":null,"receiverClaimId":null,"senderInternalNote":null,"receiverInternalNote":null}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/sender-claim-info/{tecComId}": {
+      "put": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Update sender claim info",
+        "description": "Is allowed only for claim sender to update sender claim info after claim was created",
+        "operationId": "UpdateSenderClaimInfo",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "sender claim info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SenderClaimInfoDto"
+              },
+              "example": {"internalNotes":"Sender internal notes.Are visible only for sender"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was updated with provided data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimActionResult"
+                },
+                "example": {"id":237798,"tecComOrgId":"creator tecComId","userName":"example@gmail.com","subject":"subject","createdAt":"2021-02-10T13:22:52.9220279Z","sentAt":"2021-02-10T13:22:52.9220279Z","modifiedBy":"example@gmail.com","userPosition":5,"modifiedAt":"2021-02-10T13:22:52.9220279Z","openedAt":null,"openedBy":null,"status":2,"category":0,"flowType":2,"parts":[{"id":248171,"articleNo":"2323","brand":"BIRTH","articleDescription":"Mounting, axle beam","ean":"1000000086768","materialGroup":100243,"articlePrice":100.0,"articleSellerNo":null,"serialNumber":null,"receiverItemNo":"receiverItemNo","orderPos":null,"deliveryNotePos":null,"invoicePos":null,"quantity":10,"currency":"EUR","deliveryNoteNo":"deliveryNoteNo","invoiceNo":"invoiceNo","orderNo":"orderNo","deliveryNoteLineNo":"deliveryNoteLineNo","invoiceLineNo":"invoiceLineNo","orderLineNo":"orderLineNo","invoiceDate":"2021-01-22T00:00:00Z","deliveryNoteDate":null,"orderDate":"2021-01-22T00:00:00Z","status":1,"decision":null}],"receiver":{"receiverTecComId":"receiver company tecComId","companyName":"Team9-Test-Supplier_1","companyAlternativeName":"name2","branch":"branch","address":"Address1","secondAddress":"Address 2","thirdAddress":"Address 3","zipCode":"zipCode","city":"city","stateOrProvince":"state/province","country":"DE","customerId":"54743","supplierId":"54743","deliveryPartyNo":"deliveryPartyNo","email":"example@gmail.com"},"sender":{"senderTecComId":"your company tecComId","name":"Team9-Test-Buyer_1","name2":"name2","address":"Address1","secondAddress":"Address 2","thirdAddress":"Address 3","zipCode":"zipCode","city":"city","stateOrProvince":"state/province","country":"DE","department":"department","memberBuyingGroupId":"member id buying group","branch":"branch","contact":null,"customerClaimId":"customerClaimId","deliveryNoteNumber":"deliveryNoteNo","email":"example@gmail.com"},"problem":{"wasFitted":null,"description":"Problem Description","packagingCondition":null,"detectedAt":0,"detectionDate":"2021-01-23T00:00:00Z","problemConditions":[32,16],"otherConditionDescription":"Some specific condition"},"garage":{"garageName":"GarageName","garageName2":"GarageName2","customerNo":"customerNo","invoiceNo":"InvoiceNo","salutation":"Mr","lastName":"LastName","street":"Baker Street 221b","street2":"Baker Street 222","street3":"Baker Street 223","stateOrProvince":"State","zip":"1234","city":"London","country":"GB","email":"exampleGarage@gmail.com","phone":"800 5676 455 567","receiptExists":true},"additionalCosts":[{"id":0,"currencyId":"EUR","decision":null,"description":"Description about additional cost","price":1.0,"quantity":1,"receiverItemNo":"001","type":0}],"vehicle":{"registration1":"registration1","registration2":"registration2","manufacturer":"SKODA","model":"OCTAVIA II Combi (1Z5)","version":"1.6 TDI","vin":"TMBHT61ZXA8019412","vehicleSearch":"Ukraine","modelYear":2011,"power":105,"powerUnits":0,"capacity":1598,"transmission":1,"fuel":2,"engineCode":"engineCode","engineNo":"engineNo","errorCode":"errorCode","mileageFitting":163000,"mileageFittingUnits":0,"mileageRemoval":164000,"mileageRemovalUnits":0,"fittingDate":"2021-01-26T00:00:00Z","removalDate":"2021-01-28T00:00:00Z","fittedBy":0,"removedBy":0},"individualResponse":[{"individualQuestionId":27,"response":"{\"questionType\":2,\"value\":[\"7\",\"6\",\"5\",\"4\",\"3\"],\"others\":\"\"}"}],"additional":{"acceptCondition":0,"rejectCondition":1,"comment":"Comment","dateForResponse":"2021-02-20T13:22:52.9220279Z"},"attachments":[],"claimDecision":null,"reason":null,"allowPrintLabel":null,"receiverClaimId":null,"senderInternalNote":null,"receiverInternalNote":null}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/receiver-claim-info/{tecComId}": {
+      "put": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Update receiver claim info",
+        "description": "Is allowed only for claim receiver to update receiver claim info after claim was received",
+        "operationId": "UpdateReceiverClaimInfo",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "receiver claim info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiverClaimInfoDto"
+              },
+              "example": {"receiverClaimId":"receiverClaimId","problemDescription":"Receiver additional info for description","problemOtherConditionDescription":"Receiver additional info for other description","additionalComments":"Receiver additional comments","receiverInternalNote":"Receiver internal notes. Are visible only for receiver"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was updated with provided data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimActionResult"
+                },
+                "example": {"id":237798,"tecComOrgId":"creator tecComId","userName":"example@gmail.com","subject":"subject","createdAt":"2021-02-10T13:22:52.9220279Z","sentAt":"2021-02-10T13:22:52.9220279Z","modifiedBy":"example@gmail.com","userPosition":5,"modifiedAt":"2021-02-10T13:22:52.9220279Z","openedAt":null,"openedBy":null,"status":2,"category":0,"flowType":2,"parts":[{"id":248171,"articleNo":"2323","brand":"BIRTH","articleDescription":"Mounting, axle beam","ean":"1000000086768","materialGroup":100243,"articlePrice":100.0,"articleSellerNo":null,"serialNumber":null,"receiverItemNo":"receiverItemNo","orderPos":null,"deliveryNotePos":null,"invoicePos":null,"quantity":10,"currency":"EUR","deliveryNoteNo":"deliveryNoteNo","invoiceNo":"invoiceNo","orderNo":"orderNo","deliveryNoteLineNo":"deliveryNoteLineNo","invoiceLineNo":"invoiceLineNo","orderLineNo":"orderLineNo","invoiceDate":"2021-01-22T00:00:00Z","deliveryNoteDate":null,"orderDate":"2021-01-22T00:00:00Z","status":1,"decision":null}],"receiver":{"receiverTecComId":"receiver company tecComId","companyName":"Team9-Test-Supplier_1","companyAlternativeName":"name2","branch":"branch","address":"Address1","secondAddress":"Address 2","thirdAddress":"Address 3","zipCode":"zipCode","city":"city","stateOrProvince":"state/province","country":"DE","customerId":"54743","supplierId":"54743","deliveryPartyNo":"deliveryPartyNo","email":"example@gmail.com"},"sender":{"senderTecComId":"your company tecComId","name":"Team9-Test-Buyer_1","name2":"name2","address":"Address1","secondAddress":"Address 2","thirdAddress":"Address 3","zipCode":"zipCode","city":"city","stateOrProvince":"state/province","country":"DE","department":"department","memberBuyingGroupId":"member id buying group","branch":"branch","contact":null,"customerClaimId":"customerClaimId","deliveryNoteNumber":"deliveryNoteNo","email":"example@gmail.com"},"problem":{"wasFitted":null,"description":"Problem Description","packagingCondition":null,"detectedAt":0,"detectionDate":"2021-01-23T00:00:00Z","problemConditions":[32,16],"otherConditionDescription":"Some specific condition"},"garage":{"garageName":"GarageName","garageName2":"GarageName2","customerNo":"customerNo","invoiceNo":"InvoiceNo","salutation":"Mr","lastName":"LastName","street":"Baker Street 221b","street2":"Baker Street 222","street3":"Baker Street 223","stateOrProvince":"State","zip":"1234","city":"London","country":"GB","email":"exampleGarage@gmail.com","phone":"800 5676 455 567","receiptExists":true},"additionalCosts":[{"id":0,"currencyId":"EUR","decision":null,"description":"Description about additional cost","price":1.0,"quantity":1,"receiverItemNo":"001","type":0}],"vehicle":{"registration1":"registration1","registration2":"registration2","manufacturer":"SKODA","model":"OCTAVIA II Combi (1Z5)","version":"1.6 TDI","vin":"TMBHT61ZXA8019412","vehicleSearch":"Ukraine","modelYear":2011,"power":105,"powerUnits":0,"capacity":1598,"transmission":1,"fuel":2,"engineCode":"engineCode","engineNo":"engineNo","errorCode":"errorCode","mileageFitting":163000,"mileageFittingUnits":0,"mileageRemoval":164000,"mileageRemovalUnits":0,"fittingDate":"2021-01-26T00:00:00Z","removalDate":"2021-01-28T00:00:00Z","fittedBy":0,"removedBy":0},"individualResponse":[{"individualQuestionId":27,"response":"{\"questionType\":2,\"value\":[\"7\",\"6\",\"5\",\"4\",\"3\"],\"others\":\"\"}"}],"additional":{"acceptCondition":0,"rejectCondition":1,"comment":"Comment","dateForResponse":"2021-02-20T13:22:52.9220279Z"},"attachments":[],"claimDecision":null,"reason":null,"allowPrintLabel":null,"receiverClaimId":null,"senderInternalNote":null,"receiverInternalNote":null}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/credit-note": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign a Credit Note decision for a specific Warranty claim",
+        "description": "Accept a Warranty claim including specific information of the decision taken",
+        "operationId": "DecideCreditNote",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "accept credit note decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptCreditNote"
+              },
+              "example": {"creditNoteRequestNo":"creditNoteRequestNo","creditNoteNo":"creditNoteNo","creditNoteDate":"2021-02-15T13:22:52.9396124Z","finalAmount":20.0,"currency":"EUR","remark":"remark","creditNoteItems":[{"isArticle":true,"id":0,"rejectionReason":null,"goodwill":true,"quantityAccepted":10,"acceptedNetAmount":20.0,"creditNoteNetAmount":20.0,"currency":"EUR"},{"isArticle":true,"id":0,"rejectionReason":0,"goodwill":null,"quantityAccepted":null,"acceptedNetAmount":null,"creditNoteNetAmount":null,"currency":null}]}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided credit note info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptCreditNote"
+                },
+                "example": {"creditNoteRequestNo":"creditNoteRequestNo","creditNoteNo":"creditNoteNo","creditNoteDate":"2021-02-15T13:22:52.9396124Z","finalAmount":20.0,"currency":"EUR","remark":"remark","creditNoteItems":[{"isArticle":true,"id":0,"rejectionReason":null,"goodwill":true,"quantityAccepted":10,"acceptedNetAmount":20.0,"creditNoteNetAmount":20.0,"currency":"EUR"},{"isArticle":true,"id":0,"rejectionReason":0,"goodwill":null,"quantityAccepted":null,"acceptedNetAmount":null,"creditNoteNetAmount":null,"currency":null}]}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/repair": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign a Repair decision for a specific Warranty claim",
+        "description": "Accept a Warranty claim including specific information of the decision taken",
+        "operationId": "DecideRepair",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "accept repair decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptRepair"
+              },
+              "example": {"goodwill":true,"remark":"remark","repairNo":"repairNo","repairDate":"2021-02-15T13:22:52.9532797Z","deliveryNoteNo":"deliveryNoteNo","deliveryNoteDate":"2021-02-15T13:22:52.9532797Z","trackingId":"trackingId"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided accept repair info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptRepair"
+                },
+                "example": {"goodwill":true,"remark":"remark","repairNo":"repairNo","repairDate":"2021-02-15T13:22:52.9532797Z","deliveryNoteNo":"deliveryNoteNo","deliveryNoteDate":"2021-02-15T13:22:52.9532797Z","trackingId":"trackingId"}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/replacement": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign a Replacement decision for a specific Warranty claim",
+        "description": "Accept a Warranty claim including specific information of the decision taken",
+        "operationId": "DecideReplacement",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "accept replacement decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptReplacement"
+              },
+              "example": {"goodwill":true,"remark":"remark","deliveryNoteNo":"deliveryNoteNo","deliveryNoteDate":"2021-02-15T13:22:52.9532797Z","trackingId":"trackId"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided accept replacement info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptReplacement"
+                },
+                "example": {"goodwill":true,"remark":"remark","deliveryNoteNo":"deliveryNoteNo","deliveryNoteDate":"2021-02-15T13:22:52.9532797Z","trackingId":"trackId"}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/scrap": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign a Scrap decision for a specific Warranty claim",
+        "description": "Reject a Warranty claim including specific information of the decision taken",
+        "operationId": "DecideScrap",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "reject scrap decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectScrap"
+              },
+              "example": {"remark":"remark","destructionNo":"destructionNo","destructionDate":"2021-02-15T13:22:52.9689042Z"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided reject scrap info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RejectScrap"
+                },
+                "example": {"remark":"remark","destructionNo":"destructionNo","destructionDate":"2021-02-15T13:22:52.9689042Z"}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/sendback": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign a Send back decision for a specific Warranty claim",
+        "description": "Reject a Warranty claim including specific information of the decision taken",
+        "operationId": "DecideSendBack",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "reject send back decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectSendback"
+              },
+              "example": {"remark":"remark","deliveryNoteNo":"deliveryNoteNo","deliveryNoteDate":"2021-02-10T13:22:52.9689042Z","trackingId":"trackId"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided reject send back info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RejectSendback"
+                },
+                "example": {"remark":"remark","deliveryNoteNo":"deliveryNoteNo","deliveryNoteDate":"2021-02-10T13:22:52.9689042Z","trackingId":"trackId"}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/returns-accept": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign an accept decision for a specific returns claim",
+        "description": "Accept a Returns claim including specific information of the decision taken",
+        "operationId": "DecideReturnsAccept",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "return accept decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnsAccept"
+              },
+              "example": {"creditNoteNo":"creditNoteNo","creditNoteDate":"2021-02-15T13:22:52.9689042Z","finalAmount":20.0,"currency":"EUR","remark":"remark"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided return accept info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnsAccept"
+                },
+                "example": {"creditNoteNo":"creditNoteNo","creditNoteDate":"2021-02-15T13:22:52.9689042Z","finalAmount":20.0,"currency":"EUR","remark":"remark"}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claimId}/decide-claim/{tecComId}/returns-reject": {
+      "post": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Assign an reject decision for a specific returns claim",
+        "description": "Reject a Returns claim including specific information of the decision taken",
+        "operationId": "DecideReturnsReject",
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Returns reject decision",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnsReject"
+              },
+              "example": {"remark":"remark"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Claim was decided with provided return accept info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnsAccept"
+                },
+                "example": {"creditNoteNo":"creditNoteNo","creditNoteDate":"2021-02-15T13:22:52.9880013Z","finalAmount":20.0,"currency":"EUR","remark":"remark"}
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/settings/{tecComId}/partner/{receiverTecComId}/{claimFlowType}": {
+      "get": {
+        "tags": [
+          "Claims"
+        ],
+        "summary": "Retrieve claim fields definition",
+        "description": "Retrieve claim fields definition, is field visible or mandatory.",
+        "operationId": "GetSetting",
+        "parameters": [
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "receiverTecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "claimFlowType",
+            "in": "path",
+            "description": "\r\n\r\n1 = BrokenPackage\r\n\r\n2 = BrokenFittedPart\r\n\r\n3 = BrokenNotFittedPart\r\n\r\n4 = MissingPart\r\n\r\n5 = DeliveredLate\r\n\r\n6 = OrderedMistakenly\r\n\r\n7 = DifferentPart\r\n\r\n8 = GetMore\r\n\r\n9 = GotLess\r\n\r\n10 = NotFittedOrOptional\r\n\r\n-1 = None",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ClaimFlowType"
+            },
+            "x-enumNames": [
+              "BrokenPackage",
+              "BrokenFittedPart",
+              "BrokenNotFittedPart",
+              "MissingPart",
+              "DeliveredLate",
+              "OrderedMistakenly",
+              "DifferentPart",
+              "GetMore",
+              "GotLess",
+              "NotFittedOrOptional",
+              "None"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get claim setting for passed tecComId and claim flow type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClaimSettingDto"
+                  }
+                },
+                "example": [{"name":"Claim.Subject","visible":true,"mandatory":true},{"name":"Claim.SenderInternalNote","visible":true,"mandatory":false},{"name":"Claim.ReceiverInternalNote","visible":true,"mandatory":false},{"name":"Sender.SenderTecComId","visible":true,"mandatory":true},{"name":"Sender.Name","visible":true,"mandatory":false},{"name":"Sender.Name2","visible":true,"mandatory":false},{"name":"Sender.Address","visible":true,"mandatory":false},{"name":"Sender.SecondAddress","visible":true,"mandatory":false},{"name":"Sender.ThirdAddress","visible":true,"mandatory":false},{"name":"Sender.ZipCode","visible":true,"mandatory":false},{"name":"Sender.City","visible":true,"mandatory":false},{"name":"Sender.StateOrProvince","visible":true,"mandatory":false},{"name":"Sender.Country","visible":true,"mandatory":false},{"name":"Sender.Department","visible":true,"mandatory":false},{"name":"Sender.MemberBuyingGroupId","visible":true,"mandatory":false},{"name":"Sender.Branch","visible":true,"mandatory":false},{"name":"Sender.Contact","visible":true,"mandatory":false},{"name":"Sender.CustomerClaimId","visible":true,"mandatory":false},{"name":"Sender.DeliveryNoteNumber","visible":true,"mandatory":false},{"name":"Sender.Email","visible":true,"mandatory":false},{"name":"Receiver.ReceiverTecComId","visible":true,"mandatory":true},{"name":"Receiver.CompanyName","visible":true,"mandatory":true},{"name":"Receiver.CompanyAlternativeName","visible":true,"mandatory":false},{"name":"Receiver.Branch","visible":true,"mandatory":false},{"name":"Receiver.Address","visible":true,"mandatory":false},{"name":"Receiver.SecondAddress","visible":true,"mandatory":false},{"name":"Receiver.ThirdAddress","visible":true,"mandatory":false},{"name":"Receiver.ZipCode","visible":true,"mandatory":false},{"name":"Receiver.City","visible":true,"mandatory":false},{"name":"Receiver.StateOrProvince","visible":true,"mandatory":false},{"name":"Receiver.Country","visible":true,"mandatory":false},{"name":"Receiver.Email","visible":true,"mandatory":false},{"name":"Receiver.CustomerClaimId","visible":true,"mandatory":false},{"name":"Receiver.SupplierId","visible":true,"mandatory":false},{"name":"Receiver.DeliveryPartyNo","visible":true,"mandatory":false},{"name":"ClaimPart.articleNo","visible":true,"mandatory":true},{"name":"ClaimPart.articleDescription","visible":true,"mandatory":false},{"name":"ClaimPart.brand","visible":true,"mandatory":false},{"name":"ClaimPart.ean","visible":true,"mandatory":false},{"name":"ClaimPart.materialGroup","visible":true,"mandatory":false},{"name":"ClaimPart.serialNumber","visible":true,"mandatory":false},{"name":"ClaimPart.quantity","visible":true,"mandatory":true},{"name":"ClaimPart.articleSellerNo","visible":true,"mandatory":false},{"name":"ClaimPart.articlePrice","visible":true,"mandatory":false},{"name":"ClaimPart.deliveryNoteNo","visible":true,"mandatory":false},{"name":"ClaimPart.deliveryNoteLineNo","visible":true,"mandatory":false},{"name":"ClaimPart.deliveryNoteDate","visible":true,"mandatory":false},{"name":"ClaimPart.invoiceNo","visible":true,"mandatory":false},{"name":"ClaimPart.invoiceLineNo","visible":true,"mandatory":false},{"name":"ClaimPart.invoiceDate","visible":true,"mandatory":false},{"name":"ClaimPart.orderLineNo","visible":true,"mandatory":false},{"name":"ClaimPart.orderNo","visible":true,"mandatory":false},{"name":"ClaimPart.orderDate","visible":true,"mandatory":false},{"name":"Problem.WasPartFitted","visible":true,"mandatory":true},{"name":"Problem.Description","visible":true,"mandatory":false},{"name":"Problem.DetectionDate","visible":true,"mandatory":false},{"name":"Problem.ProblemConditions","visible":false,"mandatory":false},{"name":"Problem.ConditionDescription","visible":false,"mandatory":false},{"name":"Problem.PackagingConditions","visible":true,"mandatory":false},{"name":"Problem.DetectedAt","visible":true,"mandatory":true},{"name":"Vehicle.Manufacturer","visible":false,"mandatory":false},{"name":"Vehicle.Model","visible":false,"mandatory":false},{"name":"Vehicle.Version","visible":false,"mandatory":false},{"name":"Vehicle.Vin","visible":false,"mandatory":false},{"name":"Vehicle.VehicleSearch","visible":false,"mandatory":false},{"name":"Vehicle.ModelYear","visible":false,"mandatory":false},{"name":"Vehicle.Power","visible":false,"mandatory":false},{"name":"Vehicle.Capacity","visible":false,"mandatory":false},{"name":"Vehicle.Transmission","visible":false,"mandatory":false},{"name":"Vehicle.Fuel","visible":false,"mandatory":false},{"name":"Vehicle.EngineCode","visible":false,"mandatory":false},{"name":"Vehicle.EngineNo","visible":false,"mandatory":false},{"name":"Vehicle.ErrorCode","visible":false,"mandatory":false},{"name":"Vehicle.MileageFitting","visible":false,"mandatory":false},{"name":"Vehicle.FittingDate","visible":false,"mandatory":false},{"name":"Vehicle.MileageRemoval","visible":false,"mandatory":false},{"name":"Vehicle.RemovalDate","visible":false,"mandatory":false},{"name":"Vehicle.FittedBy","visible":false,"mandatory":false},{"name":"Vehicle.RemovedBy","visible":false,"mandatory":false},{"name":"Garage.GarageName","visible":true,"mandatory":false},{"name":"Garage.GarageName2","visible":true,"mandatory":false},{"name":"Garage.Salutation","visible":true,"mandatory":false},{"name":"Garage.LastName","visible":true,"mandatory":false},{"name":"Garage.Street","visible":true,"mandatory":false},{"name":"Garage.Street2","visible":true,"mandatory":false},{"name":"Garage.Street3","visible":true,"mandatory":false},{"name":"Garage.ZipCode","visible":true,"mandatory":false},{"name":"Garage.City","visible":true,"mandatory":false},{"name":"Garage.StateOrProvince","visible":true,"mandatory":false},{"name":"Garage.Country","visible":true,"mandatory":false},{"name":"Garage.Email","visible":true,"mandatory":false},{"name":"Garage.Phone","visible":true,"mandatory":false},{"name":"Garage.CustomerNo","visible":true,"mandatory":false},{"name":"Garage.InvoiceNo","visible":true,"mandatory":false},{"name":"Garage.RepairCosts","visible":false,"mandatory":false},{"name":"Garage.LabourCosts","visible":false,"mandatory":false},{"name":"Garage.FollowUpCosts","visible":false,"mandatory":false},{"name":"Garage.Receipts","visible":false,"mandatory":false},{"name":"ClaimAdditional.ifClaimWouldBeAccepted","visible":true,"mandatory":true},{"name":"ClaimAdditional.ifClaimWouldBeRejected","visible":true,"mandatory":true},{"name":"ClaimAdditional.customerComment","visible":true,"mandatory":false},{"name":"ClaimAdditional.responseDate","visible":false,"mandatory":false},{"name":"Attachments.FileAttachments","visible":true,"mandatory":false}]
+              }
+            }
+          },
+          "400": {
+            "description": "For some reasons it is not possible to create claim. Please contact us to support",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization token is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Is forbidden to process this request for passed tecComId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Claim with passed claimId was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/odata/v1/claims": {
+      "get": {
+        "tags": [
+          "ClaimsOData"
+        ],
+        "summary": "Get claims by using OData protocol",
+        "description": "The OData Protocol is an application-level protocol for interacting with data via RESTful interfaces.\r\n\r\nThe protocol supports the description of data models and the editing and querying of data according to those models.\r\n\r\nExample:\r\n\r\nGet last 20 claims sent via GarageLink ordered by desc. And include info about sender and part \r\n\r\n$expand: sender,parts \r\n\r\n$filter: sender/SenderTecComId eq null and status eq 'Sent' \r\n\r\n$orderby: id decs \r\n\r\n$top: 20 \r\n\r\n",
+        "operationId": "Get",
+        "parameters": [
+          {
+            "name": "TecComId",
+            "in": "query",
+            "description": "TecComId of action performer",
+            "required": true,
+            "schema": {
+              "maxLength": 32,
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Limits the properties returned in the result.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Indicates the related entities to be represented inline. The maximum depth is 2.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Restricts the set of items returned. The maximum number of expressions is 100. The allowed functions are: allfunctions.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Specifies the order in which items are returned. The maximum number of expressions is 5.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Limits the number of items returned from a collection.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Excludes the specified number of items of the queried collection from the result.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Indicates whether the total count of items within a collection are returned in the result.",
+            "schema": {
+              "type": "boolean",
+              "default": "False"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimIEnumerableODataValue"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organisation/receiver-list/{tecComId}": {
+      "get": {
+        "tags": [
+          "Organisation"
+        ],
+        "summary": "Retrieve receiver valid list for the sender",
+        "description": "Retrieve the list of organisation which can receive one claim from the organisation passed as parameter",
+        "operationId": "GetReceiverList",
+        "parameters": [
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                },
+                "example": [{"tecComId":"partner1 tecComId","name":"partner1 Name","businessRelations":[{"buyerPartyNumber":"10150","supplierPartyNumber":"10160"}]},{"tecComId":"partner2 tecComId","name":"partner2 Name","businessRelations":[{"buyerPartyNumber":"10151","supplierPartyNumber":"10161"}]}]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organisation/sender-list/{tecComId}": {
+      "get": {
+        "tags": [
+          "Organisation"
+        ],
+        "summary": "Retrieve sender valid list for the receiver",
+        "description": "Retrieve the list of organisation which can send one claim to the organisation passed as parameter",
+        "operationId": "GetSenderList",
+        "parameters": [
+          {
+            "name": "tecComId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                },
+                "example": [{"tecComId":"partner1 tecComId","name":"partner1 Name","businessRelations":[{"buyerPartyNumber":"10150","supplierPartyNumber":"10160"}]},{"tecComId":"partner2 tecComId","name":"partner2 Name","businessRelations":[{"buyerPartyNumber":"10151","supplierPartyNumber":"10161"}]}]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                },
+                "example": {"statusCode":0,"errorCode":"error code that specify error","message":"help message","details":[{"errorCode":"error code that specify details of error. Ex: specification for validation model errors","message":"help message for error details"}]}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AcceptCondition": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Credit\r\n\r\n1 = Replacement\r\n\r\n2 = Repair\r\n\r\n3 = SubseqentDelivery\r\n\r\n4 = InvoiceKeptPart\r\n\r\n5 = PickupNotInvoicePart",
+        "format": "int32",
+        "x-enumNames": [
+          "Credit",
+          "Replacement",
+          "Repair",
+          "SubseqentDelivery",
+          "InvoiceKeptPart",
+          "PickupNotInvoicePart"
+        ]
+      },
+      "AcceptCreditNote": {
+        "type": "object",
+        "properties": {
+          "CreditNoteRequestNo": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FinalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AcceptCreditNoteDetail"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AcceptCreditNoteDetail": {
+        "type": "object",
+        "properties": {
+          "IsArticle": {
+            "type": "boolean"
+          },
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "RejectionReason": {
+            "$ref": "#/components/schemas/RejectionReason"
+          },
+          "Goodwill": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "QuantityAccepted": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AcceptedNetAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "CreditNoteNetAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AcceptRepair": {
+        "type": "object",
+        "properties": {
+          "Goodwill": {
+            "type": "boolean"
+          },
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RepairNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RepairDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "TrackingId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AcceptReplacement": {
+        "type": "object",
+        "properties": {
+          "Goodwill": {
+            "type": "boolean"
+          },
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "TrackingId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Additional": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "AcceptCondition": {
+            "$ref": "#/components/schemas/AcceptCondition"
+          },
+          "RejectCondition": {
+            "$ref": "#/components/schemas/RejectCondition"
+          },
+          "Comment": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DateForResponse": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalActionResult": {
+        "type": "object",
+        "properties": {
+          "AcceptCondition": {
+            "$ref": "#/components/schemas/AcceptCondition"
+          },
+          "RejectCondition": {
+            "$ref": "#/components/schemas/RejectCondition"
+          },
+          "Comment": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DateForResponse": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalCost": {
+        "type": "object",
+        "properties": {
+          "CurrencyId": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "Price": {
+            "type": "number",
+            "format": "double"
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ReceiverItemNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Type": {
+            "$ref": "#/components/schemas/AdditionalCostType"
+          },
+          "Decision": {
+            "$ref": "#/components/schemas/Decision"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalCostActionResult": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "CurrencyId": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Decision": {
+            "$ref": "#/components/schemas/DecisionActionResult"
+          },
+          "Description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Price": {
+            "type": "number",
+            "format": "double"
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ReceiverItemNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Type": {
+            "$ref": "#/components/schemas/AdditionalCostType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdditionalCostType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Repair\r\n\r\n1 = Labour\r\n\r\n2 = FollowUp",
+        "format": "int32",
+        "x-enumNames": [
+          "Repair",
+          "Labour",
+          "FollowUp"
+        ]
+      },
+      "Attachment": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "FileName": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          },
+          "Size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "MimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "ThumbnailId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "Status": {
+            "$ref": "#/components/schemas/AttachmentStatus"
+          },
+          "Category": {
+            "$ref": "#/components/schemas/AttachmentCategory"
+          },
+          "TecComId": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsForwarded": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentCategory": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = General\r\n\r\n1 = Problem\r\n\r\n2 = Vehicle",
+        "format": "int32",
+        "x-enumNames": [
+          "General",
+          "Problem",
+          "Vehicle"
+        ]
+      },
+      "AttachmentDto": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
+          },
+          "MimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ClaimId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "FileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ThumbnailId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "TecComId": {
+            "type": "string",
+            "nullable": true
+          },
+          "LinkedId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "Category": {
+            "$ref": "#/components/schemas/AttachmentCategory"
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "IsAddedAfterSend": {
+            "type": "boolean"
+          },
+          "IsForwarded": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttachmentStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = None\r\n\r\n1 = Unused\r\n\r\n2 = UsedInClaim",
+        "format": "int32",
+        "x-enumNames": [
+          "None",
+          "Unused",
+          "UsedInClaim"
+        ]
+      },
+      "AttachmentUpdateDto": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Claim": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "UserName": {
+            "maxLength": 450,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Subject": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SentAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ModifiedBy": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ModifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OpenedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OpenedBy": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Status": {
+            "$ref": "#/components/schemas/ClaimStatus"
+          },
+          "Category": {
+            "$ref": "#/components/schemas/ClaimCategory"
+          },
+          "FlowType": {
+            "$ref": "#/components/schemas/ClaimFlowType"
+          },
+          "PartMetadata": {
+            "$ref": "#/components/schemas/PartMetadata"
+          },
+          "Parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Part"
+            },
+            "nullable": true
+          },
+          "Receiver": {
+            "$ref": "#/components/schemas/Receiver"
+          },
+          "Sender": {
+            "$ref": "#/components/schemas/Sender"
+          },
+          "Problem": {
+            "$ref": "#/components/schemas/Problem"
+          },
+          "Garage": {
+            "$ref": "#/components/schemas/Garage"
+          },
+          "AdditionalCosts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalCost"
+            },
+            "nullable": true
+          },
+          "Vehicle": {
+            "$ref": "#/components/schemas/Vehicle"
+          },
+          "IndividualResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndividualResponse"
+            },
+            "nullable": true
+          },
+          "Additional": {
+            "$ref": "#/components/schemas/Additional"
+          },
+          "ClaimDecision": {
+            "$ref": "#/components/schemas/ClaimDecision"
+          },
+          "Reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "AllowPrintLabel": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "SenderInternalNote": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiverInternalNote": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiverClaimId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClaimComment"
+            },
+            "nullable": true
+          },
+          "Attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimActionResult": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "TecComOrgId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "maxLength": 450,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Subject": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SentAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ModifiedBy": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "UserPosition": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ModifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OpenedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OpenedBy": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Status": {
+            "$ref": "#/components/schemas/ClaimStatus"
+          },
+          "Category": {
+            "$ref": "#/components/schemas/ClaimCategory"
+          },
+          "FlowType": {
+            "$ref": "#/components/schemas/ClaimFlowType"
+          },
+          "Parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PartActionResult"
+            },
+            "nullable": true
+          },
+          "Receiver": {
+            "$ref": "#/components/schemas/ReceiverActionResult"
+          },
+          "Sender": {
+            "$ref": "#/components/schemas/SenderActionResult"
+          },
+          "Problem": {
+            "$ref": "#/components/schemas/ProblemActionResult"
+          },
+          "Garage": {
+            "$ref": "#/components/schemas/GarageActionResult"
+          },
+          "AdditionalCosts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalCostActionResult"
+            },
+            "nullable": true
+          },
+          "Vehicle": {
+            "$ref": "#/components/schemas/VehicleActionResult"
+          },
+          "IndividualResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndividualResponseActionResult"
+            },
+            "nullable": true
+          },
+          "Additional": {
+            "$ref": "#/components/schemas/AdditionalActionResult"
+          },
+          "Attachments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          },
+          "ClaimDecision": {
+            "$ref": "#/components/schemas/ClaimDecisionActionResult"
+          },
+          "Reason": {
+            "$ref": "#/components/schemas/ReasonActionResult"
+          },
+          "AllowPrintLabel": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ReceiverClaimId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SenderInternalNote": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiverInternalNote": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimCategory": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Warranty\r\n\r\n1 = Returns\r\n\r\n2 = WarrantyReceiver\r\n\r\n3 = ShippingDifference",
+        "format": "int32",
+        "x-enumNames": [
+          "Warranty",
+          "Returns",
+          "WarrantyReceiver",
+          "ShippingDifference"
+        ]
+      },
+      "ClaimComment": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "UserId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TecComId": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Text": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsRead": {
+            "type": "boolean"
+          },
+          "Type": {
+            "$ref": "#/components/schemas/CommentType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimDecision": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "Decision": {
+            "$ref": "#/components/schemas/DecisionType"
+          },
+          "AcceptDecision": {
+            "$ref": "#/components/schemas/AcceptCondition"
+          },
+          "DeclineDecision": {
+            "$ref": "#/components/schemas/RejectCondition"
+          },
+          "CreditNoteRequestNo": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FinalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RepairNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RepairDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "TrackingId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DestructionNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DestructionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimDecisionActionResult": {
+        "type": "object",
+        "properties": {
+          "Decision": {
+            "$ref": "#/components/schemas/DecisionType"
+          },
+          "AcceptDecision": {
+            "$ref": "#/components/schemas/AcceptCondition"
+          },
+          "DeclineDecision": {
+            "$ref": "#/components/schemas/RejectCondition"
+          },
+          "CreditNoteRequestNo": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FinalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RepairNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RepairDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "TrackingId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DestructionNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DestructionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimFlowType": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          -1
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n1 = BrokenPackage\r\n\r\n2 = BrokenFittedPart\r\n\r\n3 = BrokenNotFittedPart\r\n\r\n4 = MissingPart\r\n\r\n5 = DeliveredLate\r\n\r\n6 = OrderedMistakenly\r\n\r\n7 = DifferentPart\r\n\r\n8 = GetMore\r\n\r\n9 = GotLess\r\n\r\n10 = NotFittedOrOptional\r\n\r\n-1 = None",
+        "format": "int32",
+        "x-enumNames": [
+          "BrokenPackage",
+          "BrokenFittedPart",
+          "BrokenNotFittedPart",
+          "MissingPart",
+          "DeliveredLate",
+          "OrderedMistakenly",
+          "DifferentPart",
+          "GetMore",
+          "GotLess",
+          "NotFittedOrOptional",
+          "None"
+        ]
+      },
+      "ClaimIEnumerableODataValue": {
+        "type": "object",
+        "properties": {
+          "Value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Claim"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimSettingDto": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Visible": {
+            "type": "boolean"
+          },
+          "Mandatory": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClaimStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Draft\r\n\r\n1 = Finished\r\n\r\n2 = Sent\r\n\r\n3 = New\r\n\r\n4 = Decided\r\n\r\n5 = Decision\r\n\r\n6 = Pending\r\n\r\n7 = InWork\r\n\r\n8 = DecidedManually\r\n\r\n9 = ReceiverCreated\r\n\r\n10 = SelfCreated\r\n\r\n11 = Opened\r\n\r\n12 = Viewed",
+        "format": "int32",
+        "x-enumNames": [
+          "Draft",
+          "Finished",
+          "Sent",
+          "New",
+          "Decided",
+          "Decision",
+          "Pending",
+          "InWork",
+          "DecidedManually",
+          "ReceiverCreated",
+          "SelfCreated",
+          "Opened",
+          "Viewed"
+        ]
+      },
+      "CommentType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Regular\r\n\r\n1 = System",
+        "format": "int32",
+        "x-enumNames": [
+          "Regular",
+          "System"
+        ]
+      },
+      "CreateAdditionalCostDto": {
+        "type": "object",
+        "properties": {
+          "CurrencyId": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Price": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "ReceiverItemNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Type": {
+            "$ref": "#/components/schemas/AdditionalCostType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAdditionalDto": {
+        "type": "object",
+        "properties": {
+          "AcceptCondition": {
+            "$ref": "#/components/schemas/AcceptCondition"
+          },
+          "Comment": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DateForResponse": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "RejectCondition": {
+            "$ref": "#/components/schemas/RejectCondition"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateClaimDto": {
+        "type": "object",
+        "properties": {
+          "Additional": {
+            "$ref": "#/components/schemas/CreateAdditionalDto"
+          },
+          "AdditionalCosts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateAdditionalCostDto"
+            },
+            "nullable": true
+          },
+          "FlowType": {
+            "$ref": "#/components/schemas/ClaimFlowType"
+          },
+          "Garage": {
+            "$ref": "#/components/schemas/CreateGarageDto"
+          },
+          "IndividualResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateIndividualResponseDto"
+            },
+            "nullable": true
+          },
+          "Parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreatePartDto"
+            },
+            "nullable": true
+          },
+          "Problem": {
+            "$ref": "#/components/schemas/CreateProblemDto"
+          },
+          "Reason": {
+            "$ref": "#/components/schemas/CreateClaimReasonDto"
+          },
+          "Receiver": {
+            "$ref": "#/components/schemas/CreateReceiverDto"
+          },
+          "Sender": {
+            "$ref": "#/components/schemas/CreateSenderDto"
+          },
+          "Subject": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Vehicle": {
+            "$ref": "#/components/schemas/CreateVehicleDto"
+          },
+          "SenderInternalNotes": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateClaimReasonDto": {
+        "type": "object",
+        "properties": {
+          "ReturnReason": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateGarageDto": {
+        "type": "object",
+        "properties": {
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "GarageName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "GarageName2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Phone": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiptExists": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "Salutation": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street3": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Zip": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateIndividualResponseDto": {
+        "type": "object",
+        "properties": {
+          "IndividualQuestionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Response": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreatePartDto": {
+        "type": "object",
+        "properties": {
+          "ArticleDescription": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ArticleNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ArticlePrice": {
+            "maximum": 999999999.99,
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ArticleSellerNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Brand": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNotePos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Ean": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoicePos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MaterialGroup": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OrderPos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Quantity": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "QuantityReceived": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "ReceiverItemNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SerialNumber": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OrderDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateProblemDto": {
+        "type": "object",
+        "properties": {
+          "Description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DetectedAt": {
+            "$ref": "#/components/schemas/DetectionPlace"
+          },
+          "DetectionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OtherConditionDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "PackagingCondition": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackagingCondition"
+            },
+            "nullable": true
+          },
+          "ProblemConditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProblemCondition"
+            },
+            "nullable": true
+          },
+          "WasFitted": {
+            "$ref": "#/components/schemas/PartFitted"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateReceiverDto": {
+        "type": "object",
+        "properties": {
+          "ReceiverTecComId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CompanyName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CompanyAlternativeName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Branch": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Address": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SecondAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ThirdAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerId": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SupplierId": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryPartyNo": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSenderDto": {
+        "type": "object",
+        "properties": {
+          "SenderTecComId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Name": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Name2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Address": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SecondAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ThirdAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Department": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MemberBuyingGroupId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Branch": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Contact": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerClaimId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNumber": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "Capacity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EngineCode": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "EngineNo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ErrorCode": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "FittedBy": {
+            "$ref": "#/components/schemas/FittingPlaces"
+          },
+          "FittingDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Fuel": {
+            "$ref": "#/components/schemas/FuelTypes"
+          },
+          "Manufacturer": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MileageFitting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MileageFittingUnits": {
+            "$ref": "#/components/schemas/DistanceUnits"
+          },
+          "MileageRemoval": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MileageRemovalUnits": {
+            "$ref": "#/components/schemas/DistanceUnits"
+          },
+          "Model": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ModelYear": {
+            "minimum": 1900,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Power": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "PowerUnits": {
+            "$ref": "#/components/schemas/PowerUnits"
+          },
+          "Registration1": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Registration2": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "RemovalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "RemovedBy": {
+            "$ref": "#/components/schemas/FittingPlaces"
+          },
+          "Transmission": {
+            "$ref": "#/components/schemas/TransmissionTypes"
+          },
+          "VehicleSearch": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Version": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Vin": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Decision": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/DecisionStatus"
+          },
+          "Goodwill": {
+            "type": "boolean"
+          },
+          "QuantityAccepted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "AcceptedNetAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "CreditNoteNetAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "RejectionReason": {
+            "$ref": "#/components/schemas/RejectionReason"
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DecisionActionResult": {
+        "type": "object",
+        "properties": {
+          "Status": {
+            "$ref": "#/components/schemas/DecisionStatus"
+          },
+          "Goodwill": {
+            "type": "boolean"
+          },
+          "QuantityAccepted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "AcceptedNetAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "CreditNoteNetAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "RejectionReason": {
+            "$ref": "#/components/schemas/RejectionReason"
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DecisionStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Pending\r\n\r\n1 = Accepted\r\n\r\n2 = Modified\r\n\r\n3 = Rejected",
+        "format": "int32",
+        "x-enumNames": [
+          "Pending",
+          "Accepted",
+          "Modified",
+          "Rejected"
+        ]
+      },
+      "DecisionType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = None\r\n\r\n1 = Goodwill\r\n\r\n2 = Accept\r\n\r\n3 = Decline\r\n\r\n4 = PartiallyAccepted",
+        "format": "int32",
+        "x-enumNames": [
+          "None",
+          "Goodwill",
+          "Accept",
+          "Decline",
+          "PartiallyAccepted"
+        ]
+      },
+      "DetectionPlace": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Garage\r\n\r\n1 = EndCustomer\r\n\r\n2 = Trader",
+        "format": "int32",
+        "x-enumNames": [
+          "Garage",
+          "EndCustomer",
+          "Trader"
+        ]
+      },
+      "DistanceUnits": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = km\r\n\r\n1 = mi",
+        "format": "int32",
+        "x-enumNames": [
+          "km",
+          "mi"
+        ]
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "ErrorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "Message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ErrorDetails": {
+        "type": "object",
+        "properties": {
+          "StatusCode": {
+            "$ref": "#/components/schemas/HttpStatusCode"
+          },
+          "ErrorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "Message": {
+            "type": "string",
+            "nullable": true
+          },
+          "Details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FittingPlaces": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = Garage\r\n\r\n1 = EndCustomer\r\n\r\n2 = Unknown",
+        "format": "int32",
+        "x-enumNames": [
+          "Garage",
+          "EndCustomer",
+          "Unknown"
+        ]
+      },
+      "FuelTypes": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = None\r\n\r\n1 = Petrol\r\n\r\n2 = Diesel\r\n\r\n3 = Hydrogen\r\n\r\n4 = Ethanol\r\n\r\n5 = Electric\r\n\r\n6 = Lpg\r\n\r\n7 = Naturalgas\r\n\r\n8 = Hybridpetrol\r\n\r\n9 = Hybriddiesel\r\n\r\n10 = Other",
+        "format": "int32",
+        "x-enumNames": [
+          "None",
+          "Petrol",
+          "Diesel",
+          "Hydrogen",
+          "Ethanol",
+          "Electric",
+          "Lpg",
+          "Naturalgas",
+          "Hybridpetrol",
+          "Hybriddiesel",
+          "Other"
+        ]
+      },
+      "Garage": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "GarageName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "GarageName2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Salutation": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street3": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Zip": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Phone": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiptExists": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GarageActionResult": {
+        "type": "object",
+        "properties": {
+          "GarageName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "GarageName2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Salutation": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Street3": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Zip": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Phone": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiptExists": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          426,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505
+        ],
+        "type": "integer",
+        "format": "int32",
+        "x-enumNames": [
+          "Continue",
+          "SwitchingProtocols",
+          "OK",
+          "Created",
+          "Accepted",
+          "NonAuthoritativeInformation",
+          "NoContent",
+          "ResetContent",
+          "PartialContent",
+          "MultipleChoices",
+          "Ambiguous",
+          "MovedPermanently",
+          "Moved",
+          "Found",
+          "Redirect",
+          "SeeOther",
+          "RedirectMethod",
+          "NotModified",
+          "UseProxy",
+          "Unused",
+          "TemporaryRedirect",
+          "RedirectKeepVerb",
+          "BadRequest",
+          "Unauthorized",
+          "PaymentRequired",
+          "Forbidden",
+          "NotFound",
+          "MethodNotAllowed",
+          "NotAcceptable",
+          "ProxyAuthenticationRequired",
+          "RequestTimeout",
+          "Conflict",
+          "Gone",
+          "LengthRequired",
+          "PreconditionFailed",
+          "RequestEntityTooLarge",
+          "RequestUriTooLong",
+          "UnsupportedMediaType",
+          "RequestedRangeNotSatisfiable",
+          "ExpectationFailed",
+          "UpgradeRequired",
+          "InternalServerError",
+          "NotImplemented",
+          "BadGateway",
+          "ServiceUnavailable",
+          "GatewayTimeout",
+          "HttpVersionNotSupported"
+        ]
+      },
+      "IndividualResponse": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "IndividualQuestionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Response": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IndividualResponseActionResult": {
+        "type": "object",
+        "properties": {
+          "IndividualQuestionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Response": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PackagingCondition": {
+        "enum": [
+          0,
+          1,
+          2,
+          4,
+          8,
+          16
+        ],
+        "type": "integer",
+        "description": "",
+        "format": "int64",
+        "x-enumNames": [
+          "None",
+          "Broken",
+          "Without",
+          "LikeNew",
+          "Used",
+          "WrongBrand"
+        ]
+      },
+      "Part": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ArticleNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Brand": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ArticleDescription": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Ean": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MaterialGroup": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ArticlePrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ArticleSellerNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SerialNumber": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiverItemNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderPos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNotePos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoicePos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "QuantityReceived": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OrderDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Status": {
+            "$ref": "#/components/schemas/PartStatus"
+          },
+          "Decision": {
+            "$ref": "#/components/schemas/Decision"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PartActionResult": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ArticleNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Brand": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ArticleDescription": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Ean": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MaterialGroup": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ArticlePrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ArticleSellerNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SerialNumber": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiverItemNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderPos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNotePos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoicePos": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderNo": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OrderDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Status": {
+            "$ref": "#/components/schemas/PartStatus"
+          },
+          "Decision": {
+            "$ref": "#/components/schemas/DecisionActionResult"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PartFitted": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = No\r\n\r\n1 = Yes",
+        "format": "int32",
+        "x-enumNames": [
+          "No",
+          "Yes"
+        ]
+      },
+      "PartMetadata": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "OrderLineNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "InvoiceDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "OrderDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Partner": {
+        "type": "object",
+        "properties": {
+          "TecComId": {
+            "type": "string",
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "BusinessRelations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PartnerBusinessRelation"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PartnerBusinessRelation": {
+        "type": "object",
+        "properties": {
+          "BuyerPartyNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "SupplierPartyNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PartStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = NotReceived\r\n\r\n1 = Received\r\n\r\n2 = Refused",
+        "format": "int32",
+        "x-enumNames": [
+          "NotReceived",
+          "Received",
+          "Refused"
+        ]
+      },
+      "PowerUnits": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = hp\r\n\r\n1 = kw",
+        "format": "int32",
+        "x-enumNames": [
+          "hp",
+          "kw"
+        ]
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "WasFitted": {
+            "$ref": "#/components/schemas/PartFitted"
+          },
+          "Description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "PackagingCondition": {
+            "$ref": "#/components/schemas/PackagingCondition"
+          },
+          "DetectedAt": {
+            "$ref": "#/components/schemas/DetectionPlace"
+          },
+          "DetectionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ProblemConditions": {
+            "$ref": "#/components/schemas/ProblemCondition"
+          },
+          "OtherConditionDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemActionResult": {
+        "type": "object",
+        "properties": {
+          "WasFitted": {
+            "$ref": "#/components/schemas/PartFitted"
+          },
+          "Description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "PackagingCondition": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackagingCondition"
+            },
+            "nullable": true
+          },
+          "DetectedAt": {
+            "$ref": "#/components/schemas/DetectionPlace"
+          },
+          "DetectionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ProblemConditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProblemCondition"
+            },
+            "nullable": true
+          },
+          "OtherConditionDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemCondition": {
+        "enum": [
+          0,
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "type": "integer",
+        "description": "",
+        "format": "int64",
+        "x-enumNames": [
+          "None",
+          "Warm",
+          "Cold",
+          "Wet",
+          "Permanent",
+          "Others",
+          "Dry",
+          "Sporadically"
+        ]
+      },
+      "Reason": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ReturnReason": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReasonActionResult": {
+        "type": "object",
+        "properties": {
+          "ReturnReason": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Receiver": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ReceiverTecComId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CompanyName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CompanyAlternativeName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Branch": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Address": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SecondAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ThirdAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerId": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SupplierId": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryPartyNo": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReceiverActionResult": {
+        "type": "object",
+        "properties": {
+          "ReceiverTecComId": {
+            "type": "string",
+            "nullable": true
+          },
+          "CompanyName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CompanyAlternativeName": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Branch": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Address": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SecondAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ThirdAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerId": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SupplierId": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryPartyNo": {
+            "maxLength": 14,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReceiverClaimInfoDto": {
+        "type": "object",
+        "properties": {
+          "ReceiverClaimId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ProblemDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ProblemOtherConditionDescription": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "AdditionalComments": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ReceiverInternalNote": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RejectCondition": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = SendBack\r\n\r\n1 = Scrap",
+        "format": "int32",
+        "x-enumNames": [
+          "SendBack",
+          "Scrap"
+        ]
+      },
+      "RejectionReason": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = UnknownPart\r\n\r\n1 = InvalidReferenceDocument\r\n\r\n2 = WrongPartApplication\r\n\r\n3 = PartOld\r\n\r\n4 = UnjustifiedCustomerRequest",
+        "format": "int32",
+        "x-enumNames": [
+          "UnknownPart",
+          "InvalidReferenceDocument",
+          "WrongPartApplication",
+          "PartOld",
+          "UnjustifiedCustomerRequest"
+        ]
+      },
+      "RejectScrap": {
+        "type": "object",
+        "properties": {
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DestructionNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DestructionDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RejectSendback": {
+        "type": "object",
+        "properties": {
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "TrackingId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReturnsAccept": {
+        "type": "object",
+        "properties": {
+          "CreditNoteNo": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CreditNoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FinalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Currency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReturnsReject": {
+        "type": "object",
+        "properties": {
+          "Remark": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Sender": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "SenderTecComId": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Name": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Name2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Address": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SecondAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ThirdAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Department": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MemberBuyingGroupId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Branch": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Contact": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerClaimId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNumber": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SenderActionResult": {
+        "type": "object",
+        "properties": {
+          "SenderTecComId": {
+            "type": "string",
+            "nullable": true
+          },
+          "Name": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Name2": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Address": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "SecondAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ThirdAddress": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ZipCode": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "City": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "StateOrProvince": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Country": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Department": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MemberBuyingGroupId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Branch": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Contact": {
+            "maxLength": 70,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "CustomerClaimId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "DeliveryNoteNumber": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SenderClaimInfoDto": {
+        "type": "object",
+        "properties": {
+          "InternalNotes": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransmissionTypes": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "description": "\r\n\r\n0 = None\r\n\r\n1 = Manual\r\n\r\n2 = Semiautomatic\r\n\r\n3 = Automatic\r\n\r\n4 = Other",
+        "format": "int32",
+        "x-enumNames": [
+          "None",
+          "Manual",
+          "Semiautomatic",
+          "Automatic",
+          "Other"
+        ]
+      },
+      "Vehicle": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "Registration1": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Registration2": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Manufacturer": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Model": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Version": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Vin": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "VehicleSearch": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ModelYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Power": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "PowerUnits": {
+            "$ref": "#/components/schemas/PowerUnits"
+          },
+          "Capacity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Transmission": {
+            "$ref": "#/components/schemas/TransmissionTypes"
+          },
+          "Fuel": {
+            "$ref": "#/components/schemas/FuelTypes"
+          },
+          "EngineCode": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "EngineNo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ErrorCode": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MileageFitting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MileageFittingUnits": {
+            "$ref": "#/components/schemas/DistanceUnits"
+          },
+          "MileageRemoval": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MileageRemovalUnits": {
+            "$ref": "#/components/schemas/DistanceUnits"
+          },
+          "FittingDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "RemovalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FittedBy": {
+            "$ref": "#/components/schemas/FittingPlaces"
+          },
+          "RemovedBy": {
+            "$ref": "#/components/schemas/FittingPlaces"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VehicleActionResult": {
+        "type": "object",
+        "properties": {
+          "Registration1": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Registration2": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Manufacturer": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Model": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Version": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Vin": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "VehicleSearch": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ModelYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Power": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "PowerUnits": {
+            "$ref": "#/components/schemas/PowerUnits"
+          },
+          "Capacity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Transmission": {
+            "$ref": "#/components/schemas/TransmissionTypes"
+          },
+          "Fuel": {
+            "$ref": "#/components/schemas/FuelTypes"
+          },
+          "EngineCode": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "EngineNo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ErrorCode": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "MileageFitting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MileageFittingUnits": {
+            "$ref": "#/components/schemas/DistanceUnits"
+          },
+          "MileageRemoval": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MileageRemovalUnits": {
+            "$ref": "#/components/schemas/DistanceUnits"
+          },
+          "FittingDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "RemovalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "FittedBy": {
+            "$ref": "#/components/schemas/FittingPlaces"
+          },
+          "RemovedBy": {
+            "$ref": "#/components/schemas/FittingPlaces"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme.\r\n\r\nEnter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
